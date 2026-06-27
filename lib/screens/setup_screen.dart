@@ -29,6 +29,7 @@ class _SetupScreenState extends State<SetupScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _checkInitialCameraPermission();
     _tabController.addListener(() {
       if (!mounted) return;
       setState(() {}); // Force rebuild of TabBarView children
@@ -36,6 +37,13 @@ class _SetupScreenState extends State<SetupScreen>
         _requestCameraPermission();
       }
     });
+  }
+
+  Future<void> _checkInitialCameraPermission() async {
+    final status = await Permission.camera.status;
+    if (status.isGranted && mounted) {
+      setState(() => _scannerActive = true);
+    }
   }
 
   @override
