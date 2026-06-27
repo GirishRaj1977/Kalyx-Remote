@@ -60,15 +60,9 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0D0D14),
+      backgroundColor: Colors.black,
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: RadialGradient(
-            center: Alignment(0, -0.2),
-            radius: 1.4,
-            colors: [Color(0xFF2E1E00), Color(0xFF0D0D14)],
-          ),
-        ),
+        color: Colors.black,
         child: Center(
           child: FadeTransition(
             opacity: _fade,
@@ -84,13 +78,13 @@ class _SplashScreenState extends State<SplashScreen>
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       gradient: const LinearGradient(
-                        colors: [Color(0xFFFFB300), Color(0xFFFFA000)],
+                        colors: [Color(0xFF40C8FB), Color(0xFF01579B)],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFFFFB300).withValues(alpha: 0.5),
+                          color: const Color(0xFF40C8FB).withValues(alpha: 0.5),
                           blurRadius: 40,
                           spreadRadius: 4,
                         ),
@@ -123,7 +117,7 @@ class _SplashScreenState extends State<SplashScreen>
                   const Text(
                     'Remote',
                     style: TextStyle(
-                      color: Color(0xFFFFD54F),
+                      color: Color(0xFF80DCFF),
                       fontSize: 15,
                       fontWeight: FontWeight.w400,
                       letterSpacing: 3,
@@ -135,7 +129,7 @@ class _SplashScreenState extends State<SplashScreen>
                     height: 28,
                     child: CircularProgressIndicator(
                       strokeWidth: 2.5,
-                      color: const Color(0xFFFFB300).withValues(alpha: 0.7),
+                      color: const Color(0xFF40C8FB).withValues(alpha: 0.7),
                     ),
                   ),
                 ],

@@ -188,7 +188,7 @@ class _SetupScreenState extends State<SetupScreen>
                   indicator: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     gradient: const LinearGradient(
-                      colors: [Color(0xFFFFB300), Color(0xFFFFA000)],
+                      colors: [Color(0xFF40C8FB), Color(0xFF01579B)],
                     ),
                   ),
                   indicatorSize: TabBarIndicatorSize.tab,
@@ -244,7 +244,7 @@ class _SetupScreenState extends State<SetupScreen>
                     hint: 'http://192.168.1.x:8088',
                     keyboardType: TextInputType.url,
                     prefix: const Icon(Icons.computer_rounded,
-                        color: Color(0xFFFFB300), size: 20),
+                        color: Color(0xFF40C8FB), size: 20),
                   ),
                   const SizedBox(height: 6),
                   const Text(
@@ -260,12 +260,12 @@ class _SetupScreenState extends State<SetupScreen>
                       children: [
                         Icon(
                           _showToken ? Icons.expand_less : Icons.expand_more,
-                          color: const Color(0xFFFFB300), size: 20,
+                          color: const Color(0xFF40C8FB), size: 20,
                         ),
                         const SizedBox(width: 6),
                         const Text('Auth Token (optional)',
                             style: TextStyle(
-                                color: Color(0xFFFFD54F),
+                                color: Color(0xFF80DCFF),
                                 fontSize: 13,
                                 fontWeight: FontWeight.w500)),
                       ],
@@ -277,7 +277,7 @@ class _SetupScreenState extends State<SetupScreen>
                       controller: _tokenController,
                       hint: 'Leave blank if no token is set',
                       prefix: const Icon(Icons.key_rounded,
-                          color: Color(0xFFFFB300), size: 20),
+                          color: Color(0xFF40C8FB), size: 20),
                       obscure: true,
                     ),
                   ],
@@ -314,9 +314,9 @@ class _SetupScreenState extends State<SetupScreen>
                           ? null
                           : () => _connect(_urlController.text),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFFFB300),
+                        backgroundColor: const Color(0xFF40C8FB),
                         foregroundColor: Colors.white,
-                        disabledBackgroundColor: const Color(0xFF5D3F00),
+                        disabledBackgroundColor: const Color(0xFF002F55),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14)),
                         elevation: 0,
@@ -358,7 +358,7 @@ class _SetupScreenState extends State<SetupScreen>
             mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(Icons.camera_alt_rounded,
-                  color: Color(0xFFFFB300), size: 56),
+                  color: Color(0xFF40C8FB), size: 56),
               const SizedBox(height: 16),
               const Text('Camera Permission Required',
                   style: TextStyle(
@@ -373,7 +373,7 @@ class _SetupScreenState extends State<SetupScreen>
               ElevatedButton(
                 onPressed: _requestCameraPermission,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFFFB300),
+                  backgroundColor: const Color(0xFF40C8FB),
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12)),
@@ -433,7 +433,7 @@ class _SetupScreenState extends State<SetupScreen>
             width: 220,
             height: 220,
             decoration: BoxDecoration(
-              border: Border.all(color: const Color(0xFFFFB300), width: 2.5),
+              border: Border.all(color: const Color(0xFF40C8FB), width: 2.5),
               borderRadius: BorderRadius.circular(16),
             ),
           ),
@@ -464,7 +464,7 @@ class _SetupScreenState extends State<SetupScreen>
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  CircularProgressIndicator(color: Color(0xFFFFB300)),
+                  CircularProgressIndicator(color: Color(0xFF40C8FB)),
                   SizedBox(height: 16),
                   Text('Connecting…',
                       style: TextStyle(color: Colors.white, fontSize: 15)),
@@ -496,7 +496,7 @@ class _SetupScreenState extends State<SetupScreen>
       decoration: BoxDecoration(
         color: const Color(0xFF1A1A2E),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFFFB300).withValues(alpha: 0.3)),
+        border: Border.all(color: const Color(0xFF40C8FB).withValues(alpha: 0.3)),
       ),
       child: TextField(
         controller: controller,

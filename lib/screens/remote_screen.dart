@@ -151,7 +151,7 @@ class _RemoteScreenState extends State<RemoteScreen> {
                       child: LinearProgressIndicator(
                         value: _loadingProgress / 100,
                         backgroundColor: Colors.transparent,
-                        color: const Color(0xFFFFB300),
+                        color: const Color(0xFF40C8FB),
                         minHeight: 3,
                       ),
                     ),
@@ -175,7 +175,7 @@ class _RemoteScreenState extends State<RemoteScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Icon(Icons.wifi_off_rounded,
-                color: Color(0xFFFFB300), size: 64),
+                color: Color(0xFF40C8FB), size: 64),
             const SizedBox(height: 20),
             const Text('Cannot reach AIVue',
                 style: TextStyle(
@@ -200,8 +200,8 @@ class _RemoteScreenState extends State<RemoteScreen> {
                   icon: const Icon(Icons.refresh_rounded, size: 18),
                   label: const Text('Retry'),
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: const Color(0xFFFFD54F),
-                    side: const BorderSide(color: Color(0xFFFFB300)),
+                    foregroundColor: const Color(0xFF80DCFF),
+                    side: const BorderSide(color: Color(0xFF40C8FB)),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                   ),
@@ -212,8 +212,8 @@ class _RemoteScreenState extends State<RemoteScreen> {
                   icon: const Icon(Icons.settings_rounded, size: 18),
                   label: const Text('Change Server'),
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: const Color(0xFFFFD54F),
-                    side: const BorderSide(color: Color(0xFFFFB300)),
+                    foregroundColor: const Color(0xFF80DCFF),
+                    side: const BorderSide(color: Color(0xFF40C8FB)),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                   ),
