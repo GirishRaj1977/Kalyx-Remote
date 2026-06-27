@@ -34,11 +34,11 @@ jobs:
       - name: Build APK
         run: flutter build apk --release
 
-      - name: List APKs
-        run: find build -name "*.apk"
+      - name: Rename APK
+        run: mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/Kalyx_remote.apk
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: app-release
-          path: build/app/outputs/flutter-apk/*.apk
+          name: Kalyx_remote
+          path: build/app/outputs/flutter-apk/Kalyx_remote.apk
