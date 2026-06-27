@@ -71,10 +71,7 @@ class _RemoteScreenState extends State<RemoteScreen> {
           },
           onWebResourceError: (err) {
             if (err.isForMainFrame ?? false) {
-              setState(() {
-                _isLoading = false;
-                _hasError = true;
-              });
+              _goToSettings();
             }
           },
         ),
@@ -136,9 +133,8 @@ class _RemoteScreenState extends State<RemoteScreen> {
           children: [
             TopBar(
               title: 'Kalyx Remote',
-              subtitle: widget.serverUrl.replaceAll(RegExp(r'^https?://'), ''),
+              subtitle: 'Player Remote',
               onReload: _reload,
-              onSettings: _goToSettings,
             ),
             Expanded(
               child: Stack(

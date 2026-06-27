@@ -71,17 +71,20 @@ class TopBar extends StatelessWidget {
           ),
           // Action Buttons
           if (showButtons) ...[
-            _topButton(
-              icon: Icons.refresh_rounded,
-              tooltip: 'Reload',
-              onTap: onReload,
-            ),
-            const SizedBox(width: 10),
-            _topButton(
-              icon: Icons.settings_rounded,
-              tooltip: 'Settings',
-              onTap: onSettings,
-            ),
+            if (onReload != null)
+              _topButton(
+                icon: Icons.refresh_rounded,
+                tooltip: 'Reload',
+                onTap: onReload,
+              ),
+            if (onSettings != null) ...[
+              if (onReload != null) const SizedBox(width: 10),
+              _topButton(
+                icon: Icons.settings_rounded,
+                tooltip: 'Settings',
+                onTap: onSettings,
+              ),
+            ],
           ],
         ],
       ),

@@ -173,7 +173,6 @@ class _SetupScreenState extends State<SetupScreen>
                   _errorMessage = null;
                   _urlController.text = 'http://';
                 }),
-                onSettings: () {}, 
               ),
               const SizedBox(height: 10),
 
