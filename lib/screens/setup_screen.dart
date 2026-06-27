@@ -213,117 +213,130 @@ class _SetupScreenState extends State<SetupScreen>
   }
 
   Widget _buildManualTab() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // Server address field
-          _label('Server Address'),
-          const SizedBox(height: 8),
-          _inputField(
-            controller: _urlController,
-            hint: 'http://192.168.1.x:8088',
-            keyboardType: TextInputType.url,
-            prefix: const Icon(Icons.computer_rounded,
-                color: Color(0xFF7C3AED), size: 20),
-          ),
-          const SizedBox(height: 6),
-          const Text(
-            'Find the address in AIVue → Settings → Remote Control',
-            style: TextStyle(color: Color(0xFF666680), fontSize: 12),
-          ),
-          const SizedBox(height: 20),
-
-          // Optional auth token
-          GestureDetector(
-            onTap: () => setState(() => _showToken = !_showToken),
-            child: Row(
-              children: [
-                Icon(
-                  _showToken ? Icons.expand_less : Icons.expand_more,
-                  color: const Color(0xFF7C3AED), size: 20,
-                ),
-                const SizedBox(width: 6),
-                const Text('Auth Token (optional)',
-                    style: TextStyle(
-                        color: Color(0xFF9D77F5),
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500)),
-              ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: constraints.maxHeight,
             ),
-          ),
-          if (_showToken) ...[
-            const SizedBox(height: 10),
-            _inputField(
-              controller: _tokenController,
-              hint: 'Leave blank if no token is set',
-              prefix: const Icon(Icons.key_rounded,
-                  color: Color(0xFF7C3AED), size: 20),
-              obscure: true,
-            ),
-          ],
-          const SizedBox(height: 28),
-
-          // Error message
-          if (_errorMessage != null) ...[
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.red.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
-              ),
-              child: Row(
+            child: IntrinsicHeight(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Icon(Icons.error_outline, color: Colors.redAccent, size: 18),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Text(_errorMessage!,
-                        style: const TextStyle(color: Colors.redAccent, fontSize: 13)),
+                  const SizedBox(height: 20),
+                  // Server address field
+                  _label('Server Address'),
+                  const SizedBox(height: 8),
+                  _inputField(
+                    controller: _urlController,
+                    hint: 'http://192.168.1.x:8088',
+                    keyboardType: TextInputType.url,
+                    prefix: const Icon(Icons.computer_rounded,
+                        color: Color(0xFF7C3AED), size: 20),
                   ),
+                  const SizedBox(height: 6),
+                  const Text(
+                    'Find the address in AIVue → Settings → Remote Control',
+                    style: TextStyle(color: Color(0xFF666680), fontSize: 12),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Optional auth token
+                  GestureDetector(
+                    onTap: () => setState(() => _showToken = !_showToken),
+                    child: Row(
+                      children: [
+                        Icon(
+                          _showToken ? Icons.expand_less : Icons.expand_more,
+                          color: const Color(0xFF7C3AED), size: 20,
+                        ),
+                        const SizedBox(width: 6),
+                        const Text('Auth Token (optional)',
+                            style: TextStyle(
+                                color: Color(0xFF9D77F5),
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500)),
+                      ],
+                    ),
+                  ),
+                  if (_showToken) ...[
+                    const SizedBox(height: 10),
+                    _inputField(
+                      controller: _tokenController,
+                      hint: 'Leave blank if no token is set',
+                      prefix: const Icon(Icons.key_rounded,
+                          color: Color(0xFF7C3AED), size: 20),
+                      obscure: true,
+                    ),
+                  ],
+                  const SizedBox(height: 28),
+
+                  // Error message
+                  if (_errorMessage != null) ...[
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.red.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.error_outline, color: Colors.redAccent, size: 18),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Text(_errorMessage!,
+                                style: const TextStyle(color: Colors.redAccent, fontSize: 13)),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                  ],
+
+                  // Connect button
+                  SizedBox(
+                    height: 52,
+                    child: ElevatedButton(
+                      onPressed: _isConnecting
+                          ? null
+                          : () => _connect(_urlController.text),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF7C3AED),
+                        foregroundColor: Colors.white,
+                        disabledBackgroundColor: const Color(0xFF3A2070),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14)),
+                        elevation: 0,
+                      ),
+                      child: _isConnecting
+                          ? const SizedBox(
+                              width: 22,
+                              height: 22,
+                              child: CircularProgressIndicator(
+                                  strokeWidth: 2.5, color: Colors.white))
+                          : const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.wifi_tethering_rounded, size: 20),
+                                SizedBox(width: 10),
+                                Text('Connect',
+                                    style: TextStyle(
+                                        fontSize: 16, fontWeight: FontWeight.w600)),
+                              ],
+                            ),
+                    ),
+                  ),
+                  const SizedBox(height: 40),
                 ],
               ),
             ),
-            const SizedBox(height: 20),
-          ],
-
-          // Connect button
-          SizedBox(
-            height: 52,
-            child: ElevatedButton(
-              onPressed: _isConnecting
-                  ? null
-                  : () => _connect(_urlController.text),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF7C3AED),
-                foregroundColor: Colors.white,
-                disabledBackgroundColor: const Color(0xFF3A2070),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14)),
-                elevation: 0,
-              ),
-              child: _isConnecting
-                  ? const SizedBox(
-                      width: 22,
-                      height: 22,
-                      child: CircularProgressIndicator(
-                          strokeWidth: 2.5, color: Colors.white))
-                  : const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.wifi_tethering_rounded, size: 20),
-                        SizedBox(width: 10),
-                        Text('Connect',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w600)),
-                      ],
-                    ),
-            ),
           ),
-          const SizedBox(height: 40),
-        ],
-      ),
+        );
+      },
     );
   }
 
