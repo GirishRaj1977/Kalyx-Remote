@@ -30,7 +30,11 @@ class _SetupScreenState extends State<SetupScreen>
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(() {
-      if (_tabController.index == 1) _requestCameraPermission();
+      if (!mounted) return;
+      setState(() {}); // Force rebuild of TabBarView children
+      if (_tabController.index == 1) {
+        _requestCameraPermission();
+      }
     });
   }
 
