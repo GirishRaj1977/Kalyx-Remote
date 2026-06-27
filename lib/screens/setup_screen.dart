@@ -137,7 +137,17 @@ class _SetupScreenState extends State<SetupScreen>
     if (value.startsWith('http://') || value.startsWith('https://')) {
       _scanned = true;
       HapticFeedback.mediumImpact();
-      _connect(value);
+      try {
+        final uri = Uri.parse(value);
+        final baseUrl = '${uri.scheme}://${uri.host}:${uri.port}';
+        final token = uri.queryParameters['token'];
+        if (token != null && token.isNotEmpty) {
+          _tokenController.text = token;
+        }
+        _connect(baseUrl);
+      } catch (_) {
+        _connect(value);
+      }
     }
   }
 
