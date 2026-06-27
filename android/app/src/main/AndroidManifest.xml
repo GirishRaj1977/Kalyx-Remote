@@ -14,7 +14,7 @@
     <application
         android:label="Kalyx Remote"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/launcher_icon"
         android:usesCleartextTraffic="true">
         <!-- ↑ Required for http:// (not https) to local PC on Android 9+ -->
 

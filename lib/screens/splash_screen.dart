@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'setup_screen.dart';
 import 'remote_screen.dart';
@@ -95,10 +96,17 @@ class _SplashScreenState extends State<SplashScreen>
                         ),
                       ],
                     ),
-                    child: const Icon(
-                      Icons.cast_connected_rounded,
-                      color: Colors.white,
-                      size: 48,
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(22.0), // give it some inset inside the circle
+                        child: SvgPicture.asset(
+                          'assets/logo.svg',
+                          colorFilter: const ColorFilter.mode(
+                            Colors.white,
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 28),

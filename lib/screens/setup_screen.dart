@@ -135,8 +135,10 @@ class _SetupScreenState extends State<SetupScreen>
             children: [
               const SizedBox(height: 32),
               // Header
-              const Icon(Icons.cast_connected_rounded,
-                  color: Color(0xFF7C3AED), size: 44),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.asset('assets/favicon1.ico', width: 48, height: 48),
+              ),
               const SizedBox(height: 14),
               const Text('Connect to AIVue',
                   style: TextStyle(
