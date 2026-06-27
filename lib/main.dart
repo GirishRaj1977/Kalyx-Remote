@@ -24,7 +24,7 @@ class KalyxRemoteApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF7C3AED),
+          seedColor: const Color(0xFFFFB300),
           brightness: Brightness.dark,
         ),
         useMaterial3: true,

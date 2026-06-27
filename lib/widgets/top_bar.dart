@@ -29,7 +29,7 @@ class TopBar extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF7C3AED).withValues(alpha: 0.2),
+                  color: const Color(0xFFFFB300).withValues(alpha: 0.2),
                   blurRadius: 10,
                   spreadRadius: 1,
                 ),
@@ -109,10 +109,10 @@ class TopBar extends StatelessWidget {
               color: const Color(0xFF1A1A2E),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: const Color(0xFF7C3AED).withValues(alpha: 0.25),
+                color: const Color(0xFFFFB300).withValues(alpha: 0.25),
               ),
             ),
-            child: Icon(icon, color: const Color(0xFF9D77F5), size: 20),
+            child: Icon(icon, color: const Color(0xFFFFD54F), size: 20),
           ),
         ),
       ),
