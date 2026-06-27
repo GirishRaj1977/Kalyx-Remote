@@ -5,6 +5,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import '../widgets/top_bar.dart';
 import 'remote_screen.dart';
 
 class SetupScreen extends StatefulWidget {
@@ -24,33 +25,44 @@ class _SetupScreenState extends State<SetupScreen>
   String? _errorMessage;
   bool _scannerActive = false;
   bool _scanned = false;
+  final MobileScannerController _scannerController = MobileScannerController(
+    autoStart: false,
+    torchEnabled: false,
+  );
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     _checkInitialCameraPermission();
-    _tabController.addListener(() {
-      if (!mounted) return;
-      setState(() {}); // Force rebuild of TabBarView children
-      if (_tabController.index == 1) {
-        _requestCameraPermission();
-      }
-    });
+    _tabController.addListener(_handleTabChange);
+  }
+
+  void _handleTabChange() {
+    if (!mounted) return;
+    setState(() {}); // Force rebuild of TabBarView children
+    if (_tabController.index == 1) {
+      _requestCameraPermission();
+    } else {
+      _scannerController.stop();
+    }
   }
 
   Future<void> _checkInitialCameraPermission() async {
     final status = await Permission.camera.status;
     if (status.isGranted && mounted) {
       setState(() => _scannerActive = true);
+      _scannerController.start();
     }
   }
 
   @override
   void dispose() {
+    _tabController.removeListener(_handleTabChange);
     _tabController.dispose();
     _urlController.dispose();
     _tokenController.dispose();
+    _scannerController.dispose();
     super.dispose();
   }
 
@@ -58,6 +70,9 @@ class _SetupScreenState extends State<SetupScreen>
     final status = await Permission.camera.request();
     if (mounted) {
       setState(() => _scannerActive = status.isGranted);
+      if (status.isGranted) {
+        _scannerController.start();
+      }
     }
   }
 
@@ -141,23 +156,16 @@ class _SetupScreenState extends State<SetupScreen>
         child: SafeArea(
           child: Column(
             children: [
-              const SizedBox(height: 32),
-              // Header
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.asset('assets/favicon1.ico', width: 48, height: 48),
+              TopBar(
+                title: 'Kalyx Remote',
+                subtitle: 'Connect to AIVue',
+                onReload: () => setState(() {
+                  _errorMessage = null;
+                  _urlController.text = 'http://';
+                }),
+                onSettings: () {}, 
               ),
-              const SizedBox(height: 14),
-              const Text('Connect to AIVue',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.5)),
-              const SizedBox(height: 6),
-              const Text('Enter your PC\'s address or scan the QR code',
-                  style: TextStyle(color: Color(0xFF8888AA), fontSize: 13)),
-              const SizedBox(height: 28),
+              const SizedBox(height: 10),
 
               // Tab bar
               Container(
@@ -361,7 +369,40 @@ class _SetupScreenState extends State<SetupScreen>
         ClipRRect(
           borderRadius: BorderRadius.circular(20),
           child: MobileScanner(
+            controller: _scannerController,
             onDetect: _onQrDetected,
+            errorBuilder: (context, error, child) {
+              return Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.error_outline,
+                        color: Colors.redAccent, size: 48),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Scanner Error: ${error.errorCode}',
+                      style: const TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Text(
+                        error.errorDetails?.message ?? 'Make sure camera is not in use',
+                        style: const TextStyle(
+                            color: Color(0xFF8888AA), fontSize: 12),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () => _scannerController.start(),
+                      child: const Text('Retry'),
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
         ),
         // Scanning overlay

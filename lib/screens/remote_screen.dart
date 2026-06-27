@@ -5,6 +5,7 @@ import 'package:vibration/vibration.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../widgets/top_bar.dart';
 import 'setup_screen.dart';
 
 class RemoteScreen extends StatefulWidget {
@@ -25,22 +26,19 @@ class _RemoteScreenState extends State<RemoteScreen> {
   late final WebViewController _webViewController;
   bool _isLoading = true;
   bool _hasError = false;
-  bool _controlsVisible = false;
-  Timer? _hideTimer;
   int _loadingProgress = 0;
 
   @override
   void initState() {
     super.initState();
     WakelockPlus.enable();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     _initWebView();
   }
 
   @override
   void dispose() {
     WakelockPlus.disable();
-    _hideTimer?.cancel();
     super.dispose();
   }
 
@@ -119,14 +117,6 @@ class _RemoteScreenState extends State<RemoteScreen> {
     _webViewController.reload();
   }
 
-  void _showControls() {
-    setState(() => _controlsVisible = true);
-    _hideTimer?.cancel();
-    _hideTimer = Timer(const Duration(seconds: 3), () {
-      if (mounted) setState(() => _controlsVisible = false);
-    });
-  }
-
   void _goToSettings() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('server_url');
@@ -141,38 +131,39 @@ class _RemoteScreenState extends State<RemoteScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF0D0D14),
-      body: GestureDetector(
-        onTap: _showControls,
-        child: Stack(
+      body: SafeArea(
+        child: Column(
           children: [
-            // WebView
-            WebViewWidget(controller: _webViewController),
+            TopBar(
+              title: 'Kalyx Remote',
+              subtitle: widget.serverUrl.replaceAll(RegExp(r'^https?://'), ''),
+              onReload: _reload,
+              onSettings: _goToSettings,
+            ),
+            Expanded(
+              child: Stack(
+                children: [
+                  // WebView
+                  WebViewWidget(controller: _webViewController),
 
-            // Top loading bar
-            if (_isLoading && _loadingProgress < 100)
-              Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                child: LinearProgressIndicator(
-                  value: _loadingProgress / 100,
-                  backgroundColor: Colors.transparent,
-                  color: const Color(0xFF7C3AED),
-                  minHeight: 3,
-                ),
+                  // Top loading bar
+                  if (_isLoading && _loadingProgress < 100)
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      child: LinearProgressIndicator(
+                        value: _loadingProgress / 100,
+                        backgroundColor: Colors.transparent,
+                        color: const Color(0xFF7C3AED),
+                        minHeight: 3,
+                      ),
+                    ),
+
+                  // Error / offline banner
+                  if (_hasError) _buildOfflineBanner(),
+                ],
               ),
-
-            // Error / offline banner
-            if (_hasError) _buildOfflineBanner(),
-
-            // Floating bottom controls bar
-            AnimatedPositioned(
-              duration: const Duration(milliseconds: 250),
-              curve: Curves.easeOut,
-              bottom: _controlsVisible ? 0 : -70,
-              left: 0,
-              right: 0,
-              child: _buildControlsBar(),
             ),
           ],
         ),
@@ -234,81 +225,6 @@ class _RemoteScreenState extends State<RemoteScreen> {
               ],
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildControlsBar() {
-    return Container(
-      height: 60,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.bottomCenter,
-          end: Alignment.topCenter,
-          colors: [
-            Colors.black.withValues(alpha: 0.92),
-            Colors.black.withValues(alpha: 0.0),
-          ],
-        ),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // Server indicator
-          Row(
-            children: [
-              const Icon(Icons.cast_connected_rounded,
-                  color: Color(0xFF7C3AED), size: 16),
-              const SizedBox(width: 6),
-              Text(
-                widget.serverUrl.replaceAll(RegExp(r'^https?://'), ''),
-                style: const TextStyle(
-                    color: Color(0xFF9D77F5),
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500),
-              ),
-            ],
-          ),
-          // Action buttons
-          Row(
-            children: [
-              _barButton(
-                icon: Icons.refresh_rounded,
-                tooltip: 'Reload',
-                onTap: _reload,
-              ),
-              const SizedBox(width: 8),
-              _barButton(
-                icon: Icons.settings_rounded,
-                tooltip: 'Change Server',
-                onTap: _goToSettings,
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _barButton({
-    required IconData icon,
-    required String tooltip,
-    required VoidCallback onTap,
-  }) {
-    return Tooltip(
-      message: tooltip,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(8),
-        child: Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: const Color(0xFF7C3AED).withValues(alpha: 0.18),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Icon(icon, color: const Color(0xFF9D77F5), size: 20),
         ),
       ),
     );
