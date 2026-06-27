@@ -19,6 +19,7 @@ class _SetupScreenState extends State<SetupScreen>
   late TabController _tabController;
   final _urlController = TextEditingController(text: 'http://');
   final _tokenController = TextEditingController();
+  MobileScannerController? _scannerController;
   bool _showToken = false;
   bool _isConnecting = false;
   String? _errorMessage;
@@ -30,7 +31,11 @@ class _SetupScreenState extends State<SetupScreen>
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(() {
-      if (_tabController.index == 1) _requestCameraPermission();
+      if (_tabController.index == 1) {
+        _requestCameraPermission();
+      } else {
+        _stopScanner();
+      }
     });
   }
 
@@ -39,14 +44,28 @@ class _SetupScreenState extends State<SetupScreen>
     _tabController.dispose();
     _urlController.dispose();
     _tokenController.dispose();
+    _scannerController?.dispose();
     super.dispose();
   }
 
   Future<void> _requestCameraPermission() async {
     final status = await Permission.camera.request();
     if (mounted) {
-      setState(() => _scannerActive = status.isGranted);
+      setState(() {
+        _scannerActive = status.isGranted;
+        if (status.isGranted) {
+          _scannerController ??= MobileScannerController(
+            detectionSpeed: DetectionSpeed.normal,
+            facing: CameraFacing.back,
+            returnImage: false,
+          );
+        }
+      });
     }
+  }
+
+  void _stopScanner() {
+    _scannerController?.stop();
   }
 
   /// Validates and normalises the raw URL (strips trailing slash, ensures scheme).
@@ -347,6 +366,7 @@ class _SetupScreenState extends State<SetupScreen>
         ClipRRect(
           borderRadius: BorderRadius.circular(20),
           child: MobileScanner(
+            controller: _scannerController,
             onDetect: _onQrDetected,
           ),
         ),
