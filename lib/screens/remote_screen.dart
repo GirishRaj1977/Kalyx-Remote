@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:vibration/vibration.dart';
-import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../widgets/top_bar.dart';
@@ -33,7 +32,6 @@ class _RemoteScreenState extends State<RemoteScreen> {
   @override
   void initState() {
     super.initState();
-    WakelockPlus.enable();
     _loadDeviceId().then((_) {
       _initWebView();
     });
@@ -55,7 +53,6 @@ class _RemoteScreenState extends State<RemoteScreen> {
 
   @override
   void dispose() {
-    WakelockPlus.disable();
     super.dispose();
   }
 
