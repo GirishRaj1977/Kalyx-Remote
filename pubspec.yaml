@@ -31,9 +31,10 @@ flutter:
     - assets/
     - assets/favicon1.ico
     - assets/logo.svg
+    - assets/logo1.svg
 
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: false
-  image_path: "assets/favicon1.ico"
+  image_path: "assets/logo1.svg"
   remove_alpha_ios: true

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class TopBar extends StatelessWidget {
   final String title;
@@ -37,7 +38,7 @@ class TopBar extends StatelessWidget {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: Image.asset('assets/favicon1.ico', width: 42, height: 42),
+              child: SvgPicture.asset('assets/logo1.svg', width: 42, height: 42),
             ),
           ),
           const SizedBox(width: 14),
