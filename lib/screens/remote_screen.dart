@@ -28,12 +28,29 @@ class _RemoteScreenState extends State<RemoteScreen> {
   bool _hasError = false;
   int _loadingProgress = 0;
 
+  String _deviceId = '';
+
   @override
   void initState() {
     super.initState();
     WakelockPlus.enable();
-    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-    _initWebView();
+    _loadDeviceId().then((_) {
+      _initWebView();
+    });
+  }
+
+  Future<void> _loadDeviceId() async {
+    final prefs = await SharedPreferences.getInstance();
+    var devId = prefs.getString('device_id');
+    if (devId == null || devId.isEmpty) {
+      devId = 'remote_${DateTime.now().millisecondsSinceEpoch}_${(100 + DateTime.now().microsecond % 900)}';
+      await prefs.setString('device_id', devId);
+    }
+    if (mounted) {
+      setState(() {
+        _deviceId = devId!;
+      });
+    }
   }
 
   @override
@@ -45,8 +62,15 @@ class _RemoteScreenState extends State<RemoteScreen> {
   String get _remoteUrl {
     final base = widget.serverUrl;
     final token = widget.authToken;
+    final List<String> params = [];
     if (token != null && token.isNotEmpty) {
-      return '$base/remote/?token=$token';
+      params.add('token=$token');
+    }
+    if (_deviceId.isNotEmpty) {
+      params.add('deviceId=$_deviceId');
+    }
+    if (params.isNotEmpty) {
+      return '$base/remote/?${params.join('&')}';
     }
     return '$base/remote/';
   }
